@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contenta — маркетинговое агентство</title>
+  <style>
+    :root {
+      --bg: #f7f7fb;
+      --card: #ffffff;
+      --text: #111111;
+      --muted: #5b5b6b;
+      --accent: #a63dff;
+      --accent-soft: #f3e9ff;
+      --border: #ececf3;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    .container {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: color-mix(in srgb, var(--bg) 85%, white 15%);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(6px);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+    }
+
+    .brand {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.95rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+    }
+
+    nav a:hover { background: var(--accent-soft); color: var(--text); }
+
+    main {
+      display: grid;
+      gap: 1rem;
+      padding: 1.25rem 0 2rem;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.35rem;
+      box-shadow: 0 10px 30px rgba(17, 17, 17, 0.04);
+    }
+
+    .hero {
+      grid-column: span 12;
+      background: linear-gradient(160deg, #ffffff, #f8edff);
+      padding: 2.2rem;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.6rem;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 60ch;
+      color: var(--muted);
+    }
+
+    .cta {
+      margin-top: 1.2rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent);
+      color: #fff;
+      text-decoration: none;
+      padding: 0.75rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .cta:hover { filter: brightness(0.96); }
+
+    .section-title {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .services {
+      grid-column: span 8;
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .services-heading {
+      grid-column: span 2;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .services p.small {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .service-card,
+    .contact-item {
+      position: relative;
+      overflow: hidden;
+      transition: border-color 180ms ease, transform 180ms ease;
+    }
+
+    .service-card:hover,
+    .contact-item:hover {
+      border-color: #dfccff;
+      transform: translateY(-2px);
+    }
+
+    .service-card h3,
+    .contact-item strong {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .summary-line {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 0.8rem;
+      background: var(--accent-soft);
+      color: #6e23a7;
+      border-radius: 10px;
+      padding: 0.25rem 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .drop-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: max-height 250ms ease, opacity 180ms ease, transform 180ms ease, margin-top 180ms ease;
+    }
+
+    .drop-list li {
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 0.35rem 0;
+      border-bottom: 1px dashed #ece5f8;
+    }
+
+    .drop-list li:last-child { border-bottom: 0; }
+
+    .service-card:hover .drop-list,
+    .contact-item:hover .drop-list,
+    .service-card:focus-within .drop-list,
+    .contact-item:focus-within .drop-list {
+      max-height: 180px;
+      opacity: 1;
+      margin-top: 0.7rem;
+      transform: translateY(0);
+    }
+
+    .contacts {
+      grid-column: span 4;
+      display: grid;
+      gap: 0.7rem;
+      align-content: start;
+    }
+
+    .contact-item {
+      display: grid;
+      gap: 0.1rem;
+      padding: 0.9rem;
+      background: #fcfcff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .contact-item a,
+    .contact-item span {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      font-size: 0.88rem;
+      padding: 1.6rem 0 2.2rem;
+    }
+
+    @media (max-width: 900px) {
+      .services,
+      .contacts { grid-column: span 12; }
+    }
+
+    @media (max-width: 640px) {
+      nav { display: none; }
+      .services { grid-template-columns: 1fr; }
+      .services-heading { grid-column: span 1; }
+      .hero { padding: 1.5rem; }
+      .drop-list,
+      .service-card:hover .drop-list,
+      .contact-item:hover .drop-list {
+        max-height: none;
+        opacity: 1;
+        margin-top: 0.7rem;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-inner">
+      <div class="brand">Contenta</div>
+      <nav aria-label="Основная навигация">
+        <ul>
+          <li><a href="#hero">Главная</a></li>
+          <li><a href="#services">Услуги</a></li>
+          <li><a href="#contacts">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container bento-grid">
+    <section class="card hero" id="hero">
+      <h1>Контент, который привлекает внимание и превращает трафик в клиентов.</h1>
+      <p>Contenta помогает брендам быстро запускать маркетинговые кампании с понятной стратегией, аккуратным дизайном и сильным текстом.</p>
+      <a href="#contacts" class="cta">Запросить консультацию</a>
+    </section>
+
+    <section class="services" id="services" aria-label="Услуги Contenta">
+      <div class="card services-heading">
+        <h2 class="section-title">Наши услуги</h2>
+        <p class="small">Наведи на карточку, чтобы раскрыть детали.</p>
+      </div>
+
+      <article class="card service-card" tabindex="0">
+        <h3>Контент-стратегия</h3>
+        <p class="summary-line">План тем, тональности и форматов для роста продаж.</p>
+        <span class="tag">Стратегия</span>
+        <ul class="drop-list">
+          <li>Аудит текущего контента</li>
+          <li>Контент-план на 3 месяца</li>
+          <li>KPI и частота публикаций</li>
+        </ul>
+      </article>
+
+      <article class="card service-card" tabindex="0">
+        <h3>Креатив и дизайн</h3>
+        <p class="summary-line">Единый визуальный стиль во всех коммуникациях бренда.</p>
+        <span class="tag">Дизайн</span>
+        <ul class="drop-list">
+          <li>Лендинги и баннеры</li>
+          <li>Креативы для соцсетей</li>
+          <li>Оформление рекламных материалов</li>
+        </ul>
+      </article>
+
+      <article class="card service-card" tabindex="0">
+        <h3>Performance-маркетинг</h3>
+        <p class="summary-line">Оптимизация рекламы с акцентом на ROI и масштабирование.</p>
+        <span class="tag">Реклама</span>
+        <ul class="drop-list">
+          <li>Запуск рекламных кампаний</li>
+          <li>Тестирование гипотез и креативов</li>
+          <li>Еженедельная оптимизация бюджета</li>
+        </ul>
+      </article>
+
+      <article class="card service-card" tabindex="0">
+        <h3>Аналитика и отчётность</h3>
+        <p class="summary-line">Понятные отчёты, чтобы быстрее принимать решения.</p>
+        <span class="tag">Аналитика</span>
+        <ul class="drop-list">
+          <li>Сводные дашборды</li>
+          <li>Отчёт по конверсиям</li>
+          <li>Рекомендации по улучшению</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="card contacts" id="contacts" aria-label="Контакты">
+      <h2 class="section-title">Свяжитесь с нами</h2>
+      <p style="margin:0;color:var(--muted);">Наведи на контакт, чтобы увидеть детали.</p>
+
+      <div class="contact-item" tabindex="0">
+        <strong>Email</strong>
+        <a href="mailto:hello@contenta.ru">hello@contenta.ru</a>
+        <ul class="drop-list">
+          <li>Ответ в течение 1 рабочего дня</li>
+          <li>Можно отправить ТЗ и референсы</li>
+        </ul>
+      </div>
+
+      <div class="contact-item" tabindex="0">
+        <strong>Телефон</strong>
+        <a href="tel:+74951234567">+7 (495) 123-45-67</a>
+        <ul class="drop-list">
+          <li>Пн–Пт: 10:00–19:00</li>
+          <li>Быстрый созвон по проекту</li>
+        </ul>
+      </div>
+
+      <div class="contact-item" tabindex="0">
+        <strong>Адрес</strong>
+        <span>Москва, Пресненская набережная, 8</span>
+        <ul class="drop-list">
+          <li>Офлайн-встречи по предварительной записи</li>
+          <li>Парковка и пропуск по запросу</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © 2026 Contenta. Все права защищены.
+  </footer>
+</body>
+</html>
